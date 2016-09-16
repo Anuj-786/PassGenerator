@@ -10,6 +10,7 @@ import {
   StyleSheet,
   Text,
   View,
+  Navigator,
   WebView
 } from 'react-native';
 import Container from './app/Container';
@@ -22,19 +23,25 @@ class passGenerator extends Component {
     this.state = { screen : 2 };
   }
 
-  _renderScreen = (route, navigator) => {
+  _renderSecne = (route, navigator) => {
     switch (route.id) {
       case 1:
         return <Container />;
       break;
 
       case 2:
-        return <WebView />;
+        return <ContainerView />;
       break;
     }
   };
 
   render() {
+    return (<Navigator
+              initialRoute={{ id: 2 }}
+              renderScene={this._renderSecne}
+              configureScene={() => Navigator.SceneConfigs.FadeAndroid }
+            />
+            );
     if (this.state.screen === 1) {
       return <Container />
     } else if (this.state.screen === 2){
