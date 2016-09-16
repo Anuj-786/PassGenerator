@@ -1,0 +1,5 @@
+#for react-native
+android/
+ios/
+ 
+node_modules/
