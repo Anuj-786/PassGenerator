@@ -11,43 +11,77 @@ import {
   Text,
   View,
   Navigator,
-  WebView
+  WebView,
 } from 'react-native';
-import Container from './app/Container';
-import ContainerView from './app/ContainerView';
 
+import { Router, Secne, Animations } from 'react-native-router-flux';
+import { Provider, connect } from 'react-redux';
+import configureStore from './app/ConfigureStore';
+
+const RouterWithRedux = connect()(Router);
+const store = configureStore();
+
+// import Container from './app/Container';
+import SelectTemplate from './app/SelectTemplate';
+import FillTemplate from './app/FillTemplate';
+import PreviewTemplate from './app/PreviewTemplate';
 
 class passGenerator extends Component {
   constructor(props) {
     super(props);
     this.state = { screen : 2 };
+    this.state.transfer = {};
   }
 
-  _renderSecne = (route, navigator) => {
-    switch (route.id) {
-      case 1:
-        return <Container />;
-      break;
+  // _renderSecne = (route, navigator) => {
+  //   switch (route.id) {
+  //     case 1:
+  //       return <Container navigator={navigator}/>;
+  //     break;
+  //
+  //     case 2:
+  //       return <ContainerViewContainer  route={route} navigator={navigator}/>;
+  //     break;
+  //   }
+  // };
 
-      case 2:
-        return <ContainerView />;
-      break;
-    }
-  };
+  // render() {
+  //   return (
+  //     <Provider>
+  //       <Navigator
+  //               initialRoute={{ name: "Form Screen", id: 2 }}
+  //               renderScene={this._renderSecne}
+  //               configureScene={() => Navigator.SceneConfigs.FadeAndroid }
+  //             />
+  //     </Provider>
+  //       );
+  // }
 
-  render() {
-    return (<Navigator
-              initialRoute={{ id: 2 }}
-              renderScene={this._renderSecne}
-              configureScene={() => Navigator.SceneConfigs.FadeAndroid }
+  render = () => (
+      <Provider store={store}>
+        <RouterWithRedux>
+          <Secne key="root">
+            <Secne
+              key="pageOne"
+              component={SelectTemplate}
+              title="Choose Template"
+              initial={true} hideNavBar
             />
-            );
-    if (this.state.screen === 1) {
-      return <Container />
-    } else if (this.state.screen === 2){
-      return <ContainerView />
-    }
-  }
+            <Secne
+              key="pageTwo"
+              component={FillTemplate}
+              direction="vertical"
+              title="pageTwo"
+            />
+            <Secne
+              key="pageThree"
+              component={PreviewTemplate}
+              title="Preview"
+            />
+          </Secne>
+        </RouterWithRedux>
+      </Provider>
+    );
 }
 
 const styles = StyleSheet.create({
